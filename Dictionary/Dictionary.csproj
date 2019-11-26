@@ -113,6 +113,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EntityDeploy Include="Data\DataModels.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -152,6 +153,8 @@
       <DependentUpon>DataModels.edmx</DependentUpon>
       <LastGenOutput>DataModels.cs</LastGenOutput>
     </Content>
+    <Content Include="Image\AppIcon.ico" />
+    <Content Include="Image\Speaker.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

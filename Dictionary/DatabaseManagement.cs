@@ -1,8 +1,6 @@
-﻿using System.Linq;
+﻿using Dictionary.Data;
 using System.Collections.Generic;
-using Dictionary.Data;
-
-using System.Windows.Forms;
+using System.Linq;
 
 namespace Dictionary
 {
@@ -92,15 +90,7 @@ namespace Dictionary
 
         public int GetIDOfType(string type)
         {
-            var temp = db.Types.Select(item => item.type_description).ToList();
-            for (int i = 0; i < temp.Count; i++)
-            {
-                if (temp[i] == type)
-                {
-                    return i + 1;
-                }
-            }
-            return 1;
+            return db.Types.Where(item => item.type_description.Equals(type)).FirstOrDefault().Id;
         }
     }
 }
