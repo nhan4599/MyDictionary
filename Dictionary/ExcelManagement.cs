@@ -1,4 +1,4 @@
-﻿using Excel = Microsoft.Office.Interop.Excel;
+﻿using Excel = Microsoft.Office.Interop.Excel; // use alias named Excel for Microsoft.Office.Interop.Excel
 using System.Collections.Generic;
 using Dictionary.Data;
 using System.IO;
@@ -9,9 +9,9 @@ namespace Dictionary
     class ExcelManagement
     {
         private readonly string path;
-        private readonly Excel._Application xlsApp;
-        private Excel.Workbook xlsFile;
-        private Excel.Worksheet sheet;
+        private readonly Excel._Application xlsApp; // Application is the top-level interface of Excel file
+        private Excel.Workbook xlsFile; // represented a excel file
+        private Excel.Worksheet sheet; // represented a sheet in xlsFile
 
         public ExcelManagement(string path)
         {
@@ -25,6 +25,8 @@ namespace Dictionary
             {
                 xlsFile = xlsApp.Workbooks.Open(path);
             }
+
+            // the index of excel file is based 1, not based 0 like arrays
             sheet = xlsFile.Sheets[1];
         }
 
@@ -51,6 +53,7 @@ namespace Dictionary
 
         public void WriteFile(List<Word> t)
         {
+            // index in excel file is based on 1. But index in arrays or list is based on 0
             for (int i = 1; i <= t.Count; i++)
             {
                 Word temp = t[i - 1];
