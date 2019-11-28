@@ -7,7 +7,6 @@ namespace Dictionary
     class DatabaseManagement
     {
         private readonly DictionaryEntities db;
-
         public DatabaseManagement()
         {
             db = new DictionaryEntities();
@@ -37,11 +36,6 @@ namespace Dictionary
         public IQueryable<IGrouping<int, Word>> GetMeansOfWord(string word)
         {
             return db.Words.Where(item => item.word_o.ToLower().Equals(word.ToLower())).GroupBy(item => item.type_id);
-        }
-
-        public List<string> GetListTypes()
-        {
-            return db.Types.Select(item => item.type_description).ToList();
         }
 
         public Word AddWord(string word, int typeID, string mean)
