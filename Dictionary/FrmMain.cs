@@ -45,6 +45,21 @@ namespace Dictionary
             this.btnExport.Click += BtnExport_Click;
             this.btnDirect.Click += BtnDirect_Click;
             this.btnImport.Click += BtnImport_Click;
+            this.btnPronounce.Click += BtnPronounce_Click;
+        }
+
+        private void BtnPronounce_Click(object sender, EventArgs e)
+        {
+            if (this.txtMeans.TextLength > 0)
+            {
+                string word = this.txtMeans.Lines[0];
+                SpeechManagement speech = new SpeechManagement();
+                speech.Speak(word);
+                speech.Dispose();
+            }else
+            {
+                MessageBox.Show("Don't have anything to speak out, first you must choose a word");
+            }
         }
 
         private void BtnImport_Click(object sender, EventArgs e)
