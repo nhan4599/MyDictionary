@@ -32,7 +32,8 @@ namespace Dictionary
                 FrmEdit_Add frm = new FrmEdit_Add(true);
                 if (frm.ShowDialog() == DialogResult.Yes)
                 {
-                    frm.PerformAction(out Word obj);
+                    Word obj;
+                    frm.PerformAction(out obj);
                     wordsTable.Rows.Add(obj.word_o, obj.Type.type_description, obj.word_m);
                     wordsTable.Sort(wordsTable.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
                     MessageBox.Show("Added successfully");
@@ -186,7 +187,8 @@ namespace Dictionary
             FrmEdit_Add frm = new FrmEdit_Add(false, word, manager.GetIDOfType(type), mean);
             if (frm.ShowDialog() == DialogResult.Yes)
             {
-                frm.PerformAction(out Word obj);
+                Word obj;
+                frm.PerformAction(out obj);
                 wordsTable.Rows[e.RowIndex].Cells[2].Value = obj.word_m;
                 MessageBox.Show("Edited successfully");
             }

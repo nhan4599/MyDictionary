@@ -4,10 +4,10 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="51fb16bd362c43f080047e3c7b979da9" Name="Diagram1">
-        <EntityTypeShape EntityType="DataDictionaryModel.Type" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="DataDictionaryModel.Word" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
-        <AssociationConnector Association="DataDictionaryModel.FK__Word__type_id__25869641" ManuallyRouted="false" />
+      <Diagram DiagramId="5f5e457d8b3d42569a3faaaeabf179bb" Name="Diagram1">
+        <EntityTypeShape EntityType="DictionaryDataModel.Type" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="DictionaryDataModel.Word" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <AssociationConnector Association="DictionaryDataModel.FK__Word__type_id__1273C1CD" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

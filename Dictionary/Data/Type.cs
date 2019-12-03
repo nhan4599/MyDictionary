@@ -14,7 +14,6 @@ namespace Dictionary.Data
     
     public partial class Type
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Type()
         {
             this.Words = new HashSet<Word>();
@@ -23,7 +22,6 @@ namespace Dictionary.Data
         public int Id { get; set; }
         public string type_description { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Word> Words { get; set; }
     }
 }
