@@ -18,6 +18,10 @@ namespace Dictionary
 
         private string GetHtmlSource(string url)
         {
+            if (!IsNetworkAvailable())
+            {
+                throw new Exception("Your network is not available, please check your connection");
+            }
             try
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
@@ -32,13 +36,14 @@ namespace Dictionary
             }
         }
 
-        public string Search(string word)
+        public void Search(string word)
         {
             string htmlSource = GetHtmlSource(string.Format(searchUrl, word));
-            Regex regex = new Regex("<body>(.*\\s*)*</body>");
-            string str = regex.Match(htmlSource).Value;
-            Regex re2 = new Regex("<div class=\"phanloai\">.*</div>");
-            return re2.Match(str).Value;
+            Regex bodyReg = new Regex("<body>(.*\\s*)*</body>");
+            string bodyPartition = bodyReg.Match(htmlSource).Value;
+            Regex mainReg = new Regex("<div class=\"phanloai\">.*</div>");
+            MatchCollection matches = mainReg.Matches(bodyPartition);
+            File.WriteAllLines(@"D:\test.txt", new string[] { matches[0].Value, matches[1].Value });
         }
     }
 }

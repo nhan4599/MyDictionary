@@ -207,7 +207,8 @@ namespace Dictionary
             if (recmWordsList.Items.Count == 0)
             {
                 WebSearcher searcher = new WebSearcher();
-                MessageBox.Show(searcher.Search("culture"));
+                searcher.Search("culture");
+                MessageBox.Show("OK");
                 return;
             }
             ShowWordInfs(txtSearch.Text);

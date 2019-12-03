@@ -1,8 +1,9 @@
-﻿using Excel = Microsoft.Office.Interop.Excel; // use alias named Excel for Microsoft.Office.Interop.Excel
+﻿using Excel = Microsoft.Office.Interop.Excel;
 using System.Collections.Generic;
 using Dictionary.Data;
 using System.IO;
 using System;
+using Microsoft.Office.Core;
 
 namespace Dictionary
 {
