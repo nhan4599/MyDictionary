@@ -204,7 +204,13 @@ namespace Dictionary
 
         private void BtnFind_Click(object sender, EventArgs e)
         {
-            ShowWordInfs(this.txtSearch.Text);
+            if (recmWordsList.Items.Count == 0)
+            {
+                WebSearcher searcher = new WebSearcher();
+                MessageBox.Show(searcher.Search("culture"));
+                return;
+            }
+            ShowWordInfs(txtSearch.Text);
         }
 
         private void ShowWordInfs(string word)

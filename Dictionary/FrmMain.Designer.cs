@@ -9,7 +9,6 @@ namespace Dictionary
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-        bool test = true;
 
         /// <summary>
         /// Clean up any resources being used.
