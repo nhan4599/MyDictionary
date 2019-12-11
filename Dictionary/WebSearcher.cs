@@ -4,7 +4,8 @@ using System.Net.NetworkInformation;
 using Dictionary.Data;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
+using System.Linq;
+using HtmlAgilityPack;
 
 namespace Dictionary
 {
@@ -36,14 +37,29 @@ namespace Dictionary
             }
         }
 
-        public void Search(string word)
+        public string Search(string word)
         {
+            //List<Word> result = new List<Word>();
             string htmlSource = GetHtmlSource(string.Format(searchUrl, word));
-            Regex bodyReg = new Regex("<body>(.*\\s*)*</body>");
-            string bodyPartition = bodyReg.Match(htmlSource).Value;
-            Regex mainReg = new Regex("<div class=\"phanloai\">.*</div>");
-            MatchCollection matches = mainReg.Matches(bodyPartition);
-            File.WriteAllLines(@"D:\test.txt", new string[] { matches[0].Value, matches[1].Value });
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(htmlSource);
+
+            HtmlNodeCollection data = doc.DocumentNode.SelectNodes("//div[@class='phanloai']");
+            string result = "";
+            for (int i = 0; i < data.Count - 1; i++)
+            {
+                int preIndex = data[i].StreamPosition;
+                int nextIndex = data[i + 1].StreamPosition;
+                string current = htmlSource.Substring(preIndex, nextIndex - preIndex);
+                HtmlDocument temp = new HtmlDocument();
+                temp.LoadHtml(current);
+                HtmlNodeCollection collect = temp.DocumentNode.SelectNodes("/ul[@class='list1']/li/b");
+                for (int j = 0; j < collect.Count; j++)
+                {
+                    result += collect[j].InnerText + "\n";
+                }
+            }
+            return result;
         }
     }
 }

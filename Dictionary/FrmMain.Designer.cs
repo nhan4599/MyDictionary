@@ -49,6 +49,7 @@ namespace Dictionary
             this.lbHelp = new LinkLabel();
             this.wordsTable = new DataGridView();
             this.btnAdd = new Button();
+            this.btnSwitch = new CheckBox();
             this.btnDelete = new Button();
 
             // initialize controls for tab im_ex
@@ -170,6 +171,7 @@ namespace Dictionary
             this.tabManage.Controls.Add(this.lbHelp);
             this.tabManage.Controls.Add(this.btnDelete);
             this.tabManage.Controls.Add(this.btnAdd);
+            this.tabManage.Controls.Add(this.btnSwitch);
             this.tabManage.Location = new System.Drawing.Point(4, 25);
             this.tabManage.Name = "tabManage";
             this.tabManage.Padding = new System.Windows.Forms.Padding(3);
@@ -342,6 +344,19 @@ namespace Dictionary
             this.btnAdd.UseVisualStyleBackColor = true;
 
             //
+            // btnSwitch
+            //
+            this.btnSwitch.FlatStyle = FlatStyle.Flat;
+            this.btnSwitch.TextAlign = ContentAlignment.MiddleCenter;
+            this.btnSwitch.BackColor = Color.FromArgb(255, 106, 106);
+            this.btnSwitch.Appearance = Appearance.Button;
+            this.btnSwitch.Location = new Point(110, 25);
+            this.btnSwitch.Size = new Size(50, 23);
+            this.btnSwitch.Name = "btnSwitch";
+            this.btnSwitch.Text = "Switch";
+            this.btnSwitch.UseVisualStyleBackColor = true;
+
+            //
             // lbTitle
             //
             this.lbTitle.AutoSize = true;
@@ -406,6 +421,7 @@ namespace Dictionary
         private TabPage tabSearch, tabManage, tabIm_Ex;
         private Button btnPronounce, btnFind, btnClear, btnSelect, btnDeSelect, btnDirect, btnExport, btnDelete;
         private Button btnAdd, btnImport;
+        private CheckBox btnSwitch;
         private TextBox txtSearch, txtPath;
         private RichTextBox txtMeans;
         private ListBox recmWordsList;

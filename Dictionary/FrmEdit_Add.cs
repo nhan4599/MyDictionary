@@ -7,7 +7,7 @@ namespace Dictionary
     {
         private readonly bool shouldAdd = false;
 
-        private readonly string[] key = new string[2];
+        private readonly string[] key = new string[3];
 
         private readonly DatabaseManagement manager;
 
@@ -16,28 +16,30 @@ namespace Dictionary
             InitializeComponent();
             manager = new DatabaseManagement();
             this.shouldAdd = shouldAdd;
-
-            this.Load += (sender, e) =>
-            {
-                LoadTypeList();
-                if (this.shouldAdd)
-                {
-                    this.btnPerform.Text = "Add";
-                }
-                else
-                {
-                    key[0] = word;
-                    key[1] = type.ToString();
-                    this.txtWord.Text = word;
-                    this.txtWord.ReadOnly = true;
-                    this.cboType.SelectedItem = manager.GetTypeOfId(type);
-                    this.cboType.Enabled = false;
-                    this.txtMean.Text = mean;
-                    this.btnPerform.Text = "Save";
-                }
-            };
+            key[0] = word;
+            key[1] = type.ToString();
+            key[2] = mean;
+            this.Load += FrmEdit_Add_Load;
             this.btnPerform.DialogResult = DialogResult.Yes;
             this.btnCancel.Click += (sender, e) => this.Close();
+        }
+
+        void FrmEdit_Add_Load(object sender, System.EventArgs e)
+        {
+            LoadTypeList();
+            if (this.shouldAdd)
+            {
+                this.btnPerform.Text = "Add";
+            }
+            else
+            {
+                this.txtWord.Text = key[0];
+                this.txtWord.ReadOnly = true;
+                this.cboType.SelectedItem = manager.GetTypeOfId(int.Parse(key[1]));
+                this.cboType.Enabled = false;
+                this.txtMean.Text = key[2];
+                this.btnPerform.Text = "Save";
+            }
         }
 
         public void PerformAction(out Word obj)
