@@ -46,10 +46,26 @@ namespace Dictionary
             return obj;
         }
 
+        public Type AddType(string type)
+        {
+            Type obj = new Type() {type_description = type };
+            db.Types.Add(obj);
+            db.SaveChanges();
+            return obj;
+        }
+
         public Word RemoveWord(string word, int typeID)
         {
             Word obj = db.Words.Find(word, typeID);
             db.Words.Remove(obj);
+            db.SaveChanges();
+            return obj;
+        }
+
+        public Type RemoveType(int id)
+        {
+            Type obj = db.Types.Find(id);
+            db.Types.Remove(obj);
             db.SaveChanges();
             return obj;
         }
@@ -73,6 +89,14 @@ namespace Dictionary
         {
             Word obj = db.Words.Find(word, id);
             obj.word_m = mean;
+            db.SaveChanges();
+            return obj;
+        }
+
+        public Type EditType(int id, string type)
+        {
+            Type obj = db.Types.Find(id);
+            obj.type_description = type;
             db.SaveChanges();
             return obj;
         }

@@ -126,6 +126,12 @@
       <DependentUpon>DataModels.tt</DependentUpon>
     </Compile>
     <Compile Include="ExcelManagement.cs" />
+    <Compile Include="FrmAdd_EditType.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmAdd_EditType.Designer.cs">
+      <DependentUpon>FrmAdd_EditType.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmEdit_Add.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -140,6 +146,9 @@
     <Compile Include="SpeechManagement.cs" />
     <Compile Include="WebSearcher.cs" />
     <Compile Include="WordView.cs" />
+    <EmbeddedResource Include="FrmAdd_EditType.resx">
+      <DependentUpon>FrmAdd_EditType.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -183,10 +192,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DictionaryData.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="DictionaryData_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <DependentUpon>DictionaryData.mdf</DependentUpon>
     </Content>
     <Content Include="Image\AppIcon.ico" />

@@ -60,15 +60,28 @@ namespace Dictionary
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            FrmEdit_Add frm = new FrmEdit_Add(true);
-            if (frm.ShowDialog() == DialogResult.Yes)
+            if (!this.btnSwitch.Checked)
             {
-                Word obj;
-                frm.PerformAction(out obj);
-                wordsTable.Rows.Add(obj.word_o, obj.Type.type_description, obj.word_m);
-                wordsTable.Sort(wordsTable.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
-                MessageBox.Show("Added successfully");
+                FrmEdit_Add frm = new FrmEdit_Add(true);
+                if (frm.ShowDialog() == DialogResult.Yes)
+                {
+                    Word obj;
+                    frm.PerformAction(out obj);
+                    wordsTable.Rows.Add(obj.word_o, obj.Type.type_description, obj.word_m);
+                }
             }
+            else
+            {
+                FrmAdd_EditType frm = new FrmAdd_EditType(true);
+                if (frm.ShowDialog() == DialogResult.Yes)
+                {
+                    Data.Type obj;
+                    frm.PerformAction(out obj);
+                    wordsTable.Rows.Add(obj.Id, obj.type_description);
+                }
+            }
+            wordsTable.Sort(wordsTable.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
+            MessageBox.Show("Added successfully");
         }
 
         private void BtnPronounce_Click(object sender, EventArgs e)
@@ -197,30 +210,47 @@ namespace Dictionary
                     string type = wordsTable.SelectedRows[0].Cells[1].Value.ToString();
                     int id = manager.GetIDOfType(type);
                     manager.RemoveWord(word, id);
-                    wordsTable.Rows.RemoveAt(wordsTable.SelectedRows[0].Index);
-                    MessageBox.Show("removed successfully");
                 }
                 else
                 {
                     int typeID = int.Parse(wordsTable.SelectedRows[0].Cells[0].Value.ToString());
+                    manager.RemoveType(typeID);
                 }
+                wordsTable.Rows.RemoveAt(wordsTable.SelectedRows[0].Index);
+                MessageBox.Show("removed successfully");
             }
         }
 
         private void WordsTable_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            string word = wordsTable.Rows[e.RowIndex].Cells[0].Value.ToString();
-            string type = wordsTable.Rows[e.RowIndex].Cells[1].Value.ToString();
-            string mean = wordsTable.Rows[e.RowIndex].Cells[2].Value.ToString();
-            FrmEdit_Add frm = new FrmEdit_Add(false, word, manager.GetIDOfType(type), mean);
-            if (frm.ShowDialog() == DialogResult.Yes)
+            if (!this.btnSwitch.Checked)
             {
-                Word obj;
-                frm.PerformAction(out obj);
-                wordsTable.Rows[e.RowIndex].Cells[2].Value = obj.word_m;
-                MessageBox.Show("Edited successfully");
+                string word = wordsTable.Rows[e.RowIndex].Cells[0].Value.ToString();
+                string type = wordsTable.Rows[e.RowIndex].Cells[1].Value.ToString();
+                string mean = wordsTable.Rows[e.RowIndex].Cells[2].Value.ToString();
+                FrmEdit_Add frm = new FrmEdit_Add(false, word, manager.GetIDOfType(type), mean);
+                if (frm.ShowDialog() == DialogResult.Yes)
+                {
+                    Word obj;
+                    frm.PerformAction(out obj);
+                    wordsTable.Rows[e.RowIndex].Cells[2].Value = obj.word_m;
+                }
+                frm.Dispose();
             }
-            frm.Dispose();
+            else
+            {
+                int id = int.Parse(this.wordsTable.SelectedRows[0].Cells[0].Value.ToString());
+                string type = this.wordsTable.SelectedRows[0].Cells[1].Value.ToString();
+                FrmAdd_EditType frm = new FrmAdd_EditType(false, id, type);
+                if (frm.ShowDialog() == DialogResult.Yes)
+                {
+                    Data.Type obj;
+                    frm.PerformAction(out obj);
+                    wordsTable.Rows[e.RowIndex].Cells[1].Value = obj.type_description;
+                }
+                frm.Dispose();
+            }
+            MessageBox.Show("Edited successfully");
         }
 
         private void RecmWordsList_MouseClick(object sender, MouseEventArgs e)
