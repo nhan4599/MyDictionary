@@ -13,6 +13,18 @@ namespace Dictionary
     {
         private const string searchUrl = "https://vdict.com/{0},1,0,0.html";
         private DatabaseManagement manager;
+        
+        public WebSearcher()
+        {
+            if (!IsNetworkAvailable())
+            {
+                throw new Exception("Your network is not available, please check your connection");
+            }
+            else
+            {
+                manager = new DatabaseManagement();
+            }
+        }
         private bool IsNetworkAvailable()
         {
             return NetworkInterface.GetIsNetworkAvailable();
