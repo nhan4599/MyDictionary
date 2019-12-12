@@ -4,6 +4,7 @@ using System.Linq;
 using System.Data;
 using System.Collections.Generic;
 using System.IO;
+using System.Drawing;
 using Dictionary.Data;
 
 namespace Dictionary
@@ -22,7 +23,7 @@ namespace Dictionary
             SetHandCursor(boxExport);
             btnPronounce.Cursor = Cursors.Hand;
             this.txtSearch.Focus();
-            this.Load += GUI_Load;
+            this.Load += FrmMain_Load;
             this.txtSearch.TextChanged += TxtSearch_TextChanged;
             this.recmWordsList.MouseClick += RecmWordsList_MouseClick;
             this.btnFind.Click += BtnFind_Click;
@@ -68,6 +69,8 @@ namespace Dictionary
                     Word obj;
                     frm.PerformAction(out obj);
                     wordsTable.Rows.Add(obj.word_o, obj.Type.type_description, obj.word_m);
+                    wordsTable.Sort(wordsTable.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
+                    MessageBox.Show("Added successfully");
                 }
             }
             else
@@ -78,10 +81,10 @@ namespace Dictionary
                     Data.Type obj;
                     frm.PerformAction(out obj);
                     wordsTable.Rows.Add(obj.Id, obj.type_description);
+                    wordsTable.Sort(wordsTable.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
+                    MessageBox.Show("Added successfully");
                 }
             }
-            wordsTable.Sort(wordsTable.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
-            MessageBox.Show("Added successfully");
         }
 
         private void BtnPronounce_Click(object sender, EventArgs e)
@@ -234,6 +237,7 @@ namespace Dictionary
                     Word obj;
                     frm.PerformAction(out obj);
                     wordsTable.Rows[e.RowIndex].Cells[2].Value = obj.word_m;
+                    MessageBox.Show("Edited successfully");
                 }
                 frm.Dispose();
             }
@@ -247,10 +251,10 @@ namespace Dictionary
                     Data.Type obj;
                     frm.PerformAction(out obj);
                     wordsTable.Rows[e.RowIndex].Cells[1].Value = obj.type_description;
+                    MessageBox.Show("Edited successfully");
                 }
                 frm.Dispose();
             }
-            MessageBox.Show("Edited successfully");
         }
 
         private void RecmWordsList_MouseClick(object sender, MouseEventArgs e)
@@ -265,7 +269,13 @@ namespace Dictionary
             if (recmWordsList.Items.Count == 0)
             {
                 WebSearcher searcher = new WebSearcher();
-                MessageBox.Show(searcher.Search("culture"));
+                string addedWord = searcher.Search(txtSearch.Text);
+                //LoadTypesToManageList();
+                //foreach (var item in addedWord)
+                //{
+                //    wordsTable.Rows.Add(item.word_o, item.Type.type_description, item.word_m);
+                //}
+                MessageBox.Show(addedWord);
                 return;
             }
             ShowWordInfs(txtSearch.Text);
@@ -274,23 +284,22 @@ namespace Dictionary
         private void ShowWordInfs(string word)
         {
             this.txtMeans.Clear();
-            this.txtMeans.AppendText(word + Environment.NewLine);
-            this.txtMeans.SelectionStart = 0;
-            this.txtMeans.SelectionLength = this.txtMeans.Lines[0].Length;
-            this.txtMeans.SelectionColor = System.Drawing.Color.Purple;
-            var data = manager.GetMeansOfWord(word);
-            foreach (var type in data)
+            var meansList = manager.GetMeansOfWord(word);
+            this.AppendTextToTxtMeans(word + Environment.NewLine, Color.Purple);
+            foreach (var item in meansList)
             {
-                this.txtMeans.AppendText("    - " + manager.GetStringDescriptionOfTypeKey(type.Key));
-                this.txtMeans.SelectionStart = this.txtMeans.GetFirstCharIndexOfCurrentLine();
-                this.txtMeans.SelectionLength = this.txtMeans.Lines[this.txtMeans.GetLineFromCharIndex(this.txtMeans.SelectionStart)].Length;
-                this.txtMeans.SelectionColor = System.Drawing.Color.Blue;
-                this.txtMeans.AppendText(Environment.NewLine);
-                foreach (var means in type)
-                {
-                    this.txtMeans.AppendText("        + " + means.word_m + Environment.NewLine);
-                }
+                this.AppendTextToTxtMeans("\t- " + item.Type.type_description + Environment.NewLine, Color.Blue);
+                this.AppendTextToTxtMeans("\t\t+ " + item.word_m + Environment.NewLine, Color.Black);
             }
+        }
+
+        private void AppendTextToTxtMeans(string text, Color color)
+        {
+            txtMeans.SelectionStart = txtMeans.TextLength;
+            txtMeans.SelectionLength = 0;
+            txtMeans.SelectionColor = color;
+            txtMeans.AppendText(text);
+            txtMeans.SelectionColor = txtMeans.ForeColor;
         }
 
         private void TxtSearch_TextChanged(object sender, EventArgs e)
@@ -306,7 +315,7 @@ namespace Dictionary
             this.recmWordsList.ClearSelected();
         }
 
-        private void GUI_Load(object sender, EventArgs e)
+        private void FrmMain_Load(object sender, EventArgs e)
         {
             LoadWordsToHintList();
             LoadWordsToManageList();

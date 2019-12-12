@@ -12,6 +12,7 @@ namespace Dictionary
     class WebSearcher
     {
         private const string searchUrl = "https://vdict.com/{0},1,0,0.html";
+        private DatabaseManagement manager;
         private bool IsNetworkAvailable()
         {
             return NetworkInterface.GetIsNetworkAvailable();
@@ -39,27 +40,34 @@ namespace Dictionary
 
         public string Search(string word)
         {
-            //List<Word> result = new List<Word>();
+            List<Word> result = new List<Word>();
             string htmlSource = GetHtmlSource(string.Format(searchUrl, word));
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(htmlSource);
-
             HtmlNodeCollection data = doc.DocumentNode.SelectNodes("//div[@class='phanloai']");
-            string result = "";
+            List<string> listType = manager.GetListsTypesString();
             for (int i = 0; i < data.Count - 1; i++)
             {
+                if (!listType.Contains(data[i].InnerText))
+                {
+                    manager.AddType(data[i].InnerText);
+                }
                 int preIndex = data[i].StreamPosition;
                 int nextIndex = data[i + 1].StreamPosition;
                 string current = htmlSource.Substring(preIndex, nextIndex - preIndex);
                 HtmlDocument temp = new HtmlDocument();
                 temp.LoadHtml(current);
                 HtmlNodeCollection collect = temp.DocumentNode.SelectNodes("/ul[@class='list1']/li/b");
+                string means = "";
                 for (int j = 0; j < collect.Count; j++)
                 {
-                    result += collect[j].InnerText + "\n";
+                    means += collect[i].InnerText + ", ";
                 }
+                means = means.Remove(means.Length - 2);
+                int id = manager.GetIDOfType(data[i].InnerText);
+                result.Add(new Word() { word_o = word, type_id = id, word_m = means, Type = manager.GetTypeOfId(id) });
             }
-            return result;
+            return result.Count.ToString();
         }
     }
 }

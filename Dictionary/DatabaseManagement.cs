@@ -17,6 +17,11 @@ namespace Dictionary
             return db.Words.Select(item => item.word_o).Distinct().ToList();
         }
 
+        public List<string> GetListsTypesString()
+        {
+            return db.Types.Select(item => item.type_description).ToList();
+        }
+
         public List<WordView> GetWordsData()
         {
             var data = db.Words.Select(item => new { word = item.word_o, type = item.Type.type_description, mean = item.word_m }).ToList();
@@ -28,14 +33,9 @@ namespace Dictionary
             return result;
         }
 
-        public string GetStringDescriptionOfTypeKey(int id)
+        public List<Word> GetMeansOfWord(string word)
         {
-            return db.Types.Find(id).type_description;
-        }
-
-        public IQueryable<IGrouping<int, Word>> GetMeansOfWord(string word)
-        {
-            return db.Words.Where(item => item.word_o.ToLower().Equals(word.ToLower())).GroupBy(item => item.type_id);
+            return db.Words.Where(item => item.word_o.ToLower().Equals(word.ToLower())).ToList();
         }
 
         public Word AddWord(string word, int typeID, string mean)
