@@ -13,9 +13,12 @@ namespace Dictionary
 {
     public partial class FrmAdd_EditType : Form
     {
-        bool shouldAdd = false;
-        DatabaseManagement manager;
-        string[] key = new string[2];
+        private bool shouldAdd = false;
+
+        private DatabaseManagement manager;
+
+        private string[] key = new string[2];
+
         public FrmAdd_EditType(bool shouldAdd, int id = -1, string type = "")
         {
             InitializeComponent();
@@ -42,17 +45,19 @@ namespace Dictionary
             }
         }
 
-        public void PerformAction(out Data.Type obj)
+        public Data.Type PerformAction()
         {
+            Data.Type result;
             if (shouldAdd)
             {
-                obj = manager.AddType(txtType.Text);
+                result = manager.AddType(txtType.Text);
             }
             else
             {
-                obj = manager.EditType(int.Parse(key[0]), txtType.Text);
+                result = manager.EditType(int.Parse(key[0]), txtType.Text);
             }
             this.btnTypeCancel.PerformClick();
+            return result;
         }
     }
 }

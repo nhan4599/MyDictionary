@@ -66,8 +66,7 @@ namespace Dictionary
                 FrmEdit_Add frm = new FrmEdit_Add(true);
                 if (frm.ShowDialog() == DialogResult.Yes)
                 {
-                    Word obj;
-                    frm.PerformAction(out obj);
+                    Word obj = frm.PerformAction();
                     wordsTable.Rows.Add(obj.word_o, obj.Type.type_description, obj.word_m);
                     wordsTable.Sort(wordsTable.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
                     MessageBox.Show("Added successfully");
@@ -78,8 +77,7 @@ namespace Dictionary
                 FrmAdd_EditType frm = new FrmAdd_EditType(true);
                 if (frm.ShowDialog() == DialogResult.Yes)
                 {
-                    Data.Type obj;
-                    frm.PerformAction(out obj);
+                    Data.Type obj = frm.PerformAction();
                     wordsTable.Rows.Add(obj.Id, obj.type_description);
                     wordsTable.Sort(wordsTable.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
                     MessageBox.Show("Added successfully");
@@ -234,8 +232,7 @@ namespace Dictionary
                 FrmEdit_Add frm = new FrmEdit_Add(false, word, manager.GetIDOfType(type), mean);
                 if (frm.ShowDialog() == DialogResult.Yes)
                 {
-                    Word obj;
-                    frm.PerformAction(out obj);
+                    Word obj = frm.PerformAction();
                     wordsTable.Rows[e.RowIndex].Cells[2].Value = obj.word_m;
                     MessageBox.Show("Edited successfully");
                 }
@@ -248,8 +245,7 @@ namespace Dictionary
                 FrmAdd_EditType frm = new FrmAdd_EditType(false, id, type);
                 if (frm.ShowDialog() == DialogResult.Yes)
                 {
-                    Data.Type obj;
-                    frm.PerformAction(out obj);
+                    Data.Type obj = frm.PerformAction();
                     wordsTable.Rows[e.RowIndex].Cells[1].Value = obj.type_description;
                     MessageBox.Show("Edited successfully");
                 }

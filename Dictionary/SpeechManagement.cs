@@ -10,7 +10,7 @@ namespace Dictionary
         {
             speech = new SpeechSynthesizer();
             speech.SetOutputToDefaultAudioDevice();
-            speech.Volume = 80;
+            speech.Volume = 100;
             speech.Rate = -3;
         }
 
