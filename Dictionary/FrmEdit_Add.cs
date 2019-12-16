@@ -44,10 +44,8 @@ namespace Dictionary
 
         public Word PerformAction()
         {
-            Word result;
             if (shouldAdd)
             {
-<<<<<<< HEAD
                 this.btnCancel.PerformClick();
                 return manager.AddWord(txtWord.Text, int.Parse(cboType.SelectedValue.ToString()), txtMean.Text);
             }
@@ -56,16 +54,6 @@ namespace Dictionary
                 this.btnCancel.PerformClick();
                 return manager.EditWord(txtWord.Text, int.Parse(cboType.SelectedValue.ToString()), txtMean.Text);
             }
-=======
-                result = manager.AddWord(txtWord.Text, int.Parse(cboType.SelectedValue.ToString()), txtMean.Text);
-            }
-            else
-            {
-                result = manager.EditWord(txtWord.Text, int.Parse(cboType.SelectedValue.ToString()), txtMean.Text);
-            }
-            this.btnCancel.PerformClick();
-            return result;
->>>>>>> 443a72d8de5ae5828dff712e3f73c64ff5c87876
         }
 
         private void LoadTypeList()

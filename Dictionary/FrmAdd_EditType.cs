@@ -47,10 +47,8 @@ namespace Dictionary
 
         public Data.Type PerformAction()
         {
-            Data.Type result;
             if (shouldAdd)
             {
-<<<<<<< HEAD
                 this.btnTypeCancel.PerformClick();
                 return manager.AddType(txtType.Text);
             }
@@ -59,16 +57,6 @@ namespace Dictionary
                 this.btnTypeCancel.PerformClick();
                 return manager.EditType(int.Parse(key[0]), txtType.Text);
             }
-=======
-                result = manager.AddType(txtType.Text);
-            }
-            else
-            {
-                result = manager.EditType(int.Parse(key[0]), txtType.Text);
-            }
-            this.btnTypeCancel.PerformClick();
-            return result;
->>>>>>> 443a72d8de5ae5828dff712e3f73c64ff5c87876
         }
     }
 }

@@ -12,19 +12,6 @@ namespace Dictionary
     class WebSearcher
     {
         private const string searchUrl = "https://vdict.com/{0},1,0,0.html";
-        private DatabaseManagement manager;
-        
-        public WebSearcher()
-        {
-            if (!IsNetworkAvailable())
-            {
-                throw new Exception("Your network is not available, please check your connection");
-            }
-            else
-            {
-                manager = new DatabaseManagement();
-            }
-        }
         private bool IsNetworkAvailable()
         {
             return NetworkInterface.GetIsNetworkAvailable();
@@ -52,16 +39,11 @@ namespace Dictionary
 
         public List<WordView> Search(string word)
         {
-<<<<<<< HEAD
             List<WordView> result = new List<WordView>();
-=======
-            List<Word> result = new List<Word>();
->>>>>>> 443a72d8de5ae5828dff712e3f73c64ff5c87876
             string htmlSource = GetHtmlSource(string.Format(searchUrl, word));
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(htmlSource);
             HtmlNodeCollection data = doc.DocumentNode.SelectNodes("//div[@class='phanloai']");
-<<<<<<< HEAD
             string means = "";
             string current = "";
             int startIndex = 0;
@@ -95,31 +77,6 @@ namespace Dictionary
             means = means.Remove(means.Length - 2);
             result.Add(new WordView() { word = word, type = data[data.Count - 1].InnerText, mean = means });
             return result;
-=======
-            List<string> listType = manager.GetListsTypesString();
-            for (int i = 0; i < data.Count - 1; i++)
-            {
-                if (!listType.Contains(data[i].InnerText))
-                {
-                    manager.AddType(data[i].InnerText);
-                }
-                int preIndex = data[i].StreamPosition;
-                int nextIndex = data[i + 1].StreamPosition;
-                string current = htmlSource.Substring(preIndex, nextIndex - preIndex);
-                HtmlDocument temp = new HtmlDocument();
-                temp.LoadHtml(current);
-                HtmlNodeCollection collect = temp.DocumentNode.SelectNodes("/ul[@class='list1']/li/b");
-                string means = "";
-                for (int j = 0; j < collect.Count; j++)
-                {
-                    means += collect[i].InnerText + ", ";
-                }
-                means = means.Remove(means.Length - 2);
-                int id = manager.GetIDOfType(data[i].InnerText);
-                result.Add(new Word() { word_o = word, type_id = id, word_m = means, Type = manager.GetTypeOfId(id) });
-            }
-            return result.Count.ToString();
->>>>>>> 443a72d8de5ae5828dff712e3f73c64ff5c87876
         }
     }
 }
