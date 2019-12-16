@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Data;
 using System.Collections.Generic;
 using System.IO;
+using System.Drawing;
 using Dictionary.Data;
 using System.Drawing;
 
@@ -22,7 +23,7 @@ namespace Dictionary
             SetHandCursor(boxExport);
             btnPronounce.Cursor = Cursors.Hand;
             this.txtSearch.Focus();
-            this.Load += GUI_Load;
+            this.Load += FrmMain_Load;
             this.txtSearch.TextChanged += TxtSearch_TextChanged;
             this.lbRecmWords.MouseClick += RecmWordsList_MouseClick;
             this.btnFind.Click += BtnFind_Click;
@@ -72,10 +73,15 @@ namespace Dictionary
                 if (frm.ShowDialog() == DialogResult.Yes)
                 {
                     Word obj = frm.PerformAction();
+<<<<<<< HEAD
                     grdWords.Rows.Add(obj.word_o, obj.Type.type_description, obj.word_m);
                     grdWords.Sort(grdWords.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
                     LoadWordsToHintList();
                     LoadWordsToImExTab();
+=======
+                    wordsTable.Rows.Add(obj.word_o, obj.Type.type_description, obj.word_m);
+                    wordsTable.Sort(wordsTable.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
+>>>>>>> 443a72d8de5ae5828dff712e3f73c64ff5c87876
                     MessageBox.Show("Added successfully");
                 }
             }
@@ -85,10 +91,15 @@ namespace Dictionary
                 if (frm.ShowDialog() == DialogResult.Yes)
                 {
                     Data.Type obj = frm.PerformAction();
+<<<<<<< HEAD
                     grdWords.Rows.Add(obj.Id, obj.type_description);
                     grdWords.Sort(grdWords.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
                     LoadWordsToHintList();
                     LoadWordsToImExTab();
+=======
+                    wordsTable.Rows.Add(obj.Id, obj.type_description);
+                    wordsTable.Sort(wordsTable.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
+>>>>>>> 443a72d8de5ae5828dff712e3f73c64ff5c87876
                     MessageBox.Show("Added successfully");
                 }
             }
@@ -247,7 +258,11 @@ namespace Dictionary
                 if (frm.ShowDialog() == DialogResult.Yes)
                 {
                     Word obj = frm.PerformAction();
+<<<<<<< HEAD
                     grdWords.Rows[e.RowIndex].Cells[2].Value = obj.word_m;
+=======
+                    wordsTable.Rows[e.RowIndex].Cells[2].Value = obj.word_m;
+>>>>>>> 443a72d8de5ae5828dff712e3f73c64ff5c87876
                     MessageBox.Show("Edited successfully");
                 }
                 frm.Dispose();
@@ -260,7 +275,11 @@ namespace Dictionary
                 if (frm.ShowDialog() == DialogResult.Yes)
                 {
                     Data.Type obj = frm.PerformAction();
+<<<<<<< HEAD
                     grdWords.Rows[e.RowIndex].Cells[1].Value = obj.type_description;
+=======
+                    wordsTable.Rows[e.RowIndex].Cells[1].Value = obj.type_description;
+>>>>>>> 443a72d8de5ae5828dff712e3f73c64ff5c87876
                     MessageBox.Show("Edited successfully");
                 }
                 frm.Dispose();
@@ -282,6 +301,7 @@ namespace Dictionary
         {
             if (lbRecmWords.Items.Count == 0)
             {
+<<<<<<< HEAD
                 this.Enabled = false;
                 try
                 {
@@ -301,6 +321,16 @@ namespace Dictionary
                     }
                 }
                 this.Enabled = true;
+=======
+                WebSearcher searcher = new WebSearcher();
+                string addedWord = searcher.Search(txtSearch.Text);
+                //LoadTypesToManageList();
+                //foreach (var item in addedWord)
+                //{
+                //    wordsTable.Rows.Add(item.word_o, item.Type.type_description, item.word_m);
+                //}
+                MessageBox.Show(addedWord);
+>>>>>>> 443a72d8de5ae5828dff712e3f73c64ff5c87876
                 return;
             }
             ShowWordInfs(manager.GetWords(txtSearch.Text));
@@ -308,6 +338,7 @@ namespace Dictionary
 
         private void ShowWordInfs(List<WordView> data)
         {
+<<<<<<< HEAD
             this.rtbMeans.Clear();
             this.AppendText(data[0].word + Environment.NewLine, Color.Purple);
             for (int i = 0; i < data.Count; i++)
@@ -335,6 +366,25 @@ namespace Dictionary
             rtbMeans.SelectionColor = color;
             rtbMeans.AppendText(text);
             rtbMeans.SelectionColor = rtbMeans.ForeColor;
+=======
+            this.txtMeans.Clear();
+            var meansList = manager.GetMeansOfWord(word);
+            this.AppendTextToTxtMeans(word + Environment.NewLine, Color.Purple);
+            foreach (var item in meansList)
+            {
+                this.AppendTextToTxtMeans("\t- " + item.Type.type_description + Environment.NewLine, Color.Blue);
+                this.AppendTextToTxtMeans("\t\t+ " + item.word_m + Environment.NewLine, Color.Black);
+            }
+        }
+
+        private void AppendTextToTxtMeans(string text, Color color)
+        {
+            txtMeans.SelectionStart = txtMeans.TextLength;
+            txtMeans.SelectionLength = 0;
+            txtMeans.SelectionColor = color;
+            txtMeans.AppendText(text);
+            txtMeans.SelectionColor = txtMeans.ForeColor;
+>>>>>>> 443a72d8de5ae5828dff712e3f73c64ff5c87876
         }
 
         private void TxtSearch_TextChanged(object sender, EventArgs e)
@@ -353,7 +403,7 @@ namespace Dictionary
             this.lbRecmWords.ClearSelected();
         }
 
-        private void GUI_Load(object sender, EventArgs e)
+        private void FrmMain_Load(object sender, EventArgs e)
         {
             LoadWordsToHintList();
             LoadWordsToManageList();

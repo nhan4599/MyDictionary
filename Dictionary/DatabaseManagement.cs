@@ -13,16 +13,23 @@ namespace Dictionary
             return db.Words.Select(item => item.word_o).Distinct().ToList();
         }
 
+<<<<<<< HEAD
         public List<string> GetTypesString()
+=======
+        public List<string> GetListsTypesString()
+>>>>>>> 443a72d8de5ae5828dff712e3f73c64ff5c87876
         {
             return db.Types.Select(item => item.type_description).ToList();
         }
 
+<<<<<<< HEAD
         public List<string> GetWordsStartWith(string text)
         {
             return db.Words.Where(item => item.word_o.ToLower().StartsWith(text.ToLower())).Select(item => item.word_o).ToList();
         }
 
+=======
+>>>>>>> 443a72d8de5ae5828dff712e3f73c64ff5c87876
         public List<WordView> GetWordsData()
         {
             var data = db.Words.ToList();
@@ -34,9 +41,15 @@ namespace Dictionary
             return result;
         }
 
+<<<<<<< HEAD
         private string GetStringDescriptionOfTypeKey(int id)
         {
             return db.Types.Find(id).type_description;
+=======
+        public List<Word> GetMeansOfWord(string word)
+        {
+            return db.Words.Where(item => item.word_o.ToLower().Equals(word.ToLower())).ToList();
+>>>>>>> 443a72d8de5ae5828dff712e3f73c64ff5c87876
         }
 
         public Word AddWord(string word, int typeID, string mean)
