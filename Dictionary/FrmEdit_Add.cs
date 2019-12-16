@@ -42,17 +42,18 @@ namespace Dictionary
             }
         }
 
-        public void PerformAction(out Word obj)
+        public Word PerformAction()
         {
             if (shouldAdd)
             {
-                obj = manager.AddWord(txtWord.Text, int.Parse(cboType.SelectedValue.ToString()), txtMean.Text);
+                this.btnCancel.PerformClick();
+                return manager.AddWord(txtWord.Text, int.Parse(cboType.SelectedValue.ToString()), txtMean.Text);
             }
             else
             {
-                obj = manager.EditWord(txtWord.Text, int.Parse(cboType.SelectedValue.ToString()), txtMean.Text);
+                this.btnCancel.PerformClick();
+                return manager.EditWord(txtWord.Text, int.Parse(cboType.SelectedValue.ToString()), txtMean.Text);
             }
-            this.btnCancel.PerformClick();
         }
 
         private void LoadTypeList()

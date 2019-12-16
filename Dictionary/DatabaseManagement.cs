@@ -6,41 +6,42 @@ namespace Dictionary
 {
     class DatabaseManagement
     {
-        private readonly DictionaryEntities db;
-        public DatabaseManagement()
-        {
-            db = new DictionaryEntities();
-        }
+        DictionaryEntities db = new DictionaryEntities();
 
         public List<string> GetDistinctWordsList()
         {
             return db.Words.Select(item => item.word_o).Distinct().ToList();
         }
 
+        public List<string> GetTypesString()
+        {
+            return db.Types.Select(item => item.type_description).ToList();
+        }
+
+        public List<string> GetWordsStartWith(string text)
+        {
+            return db.Words.Where(item => item.word_o.ToLower().StartsWith(text.ToLower())).Select(item => item.word_o).ToList();
+        }
+
         public List<WordView> GetWordsData()
         {
-            var data = db.Words.Select(item => new { word = item.word_o, type = item.Type.type_description, mean = item.word_m }).ToList();
+            var data = db.Words.ToList();
             var result = new List<WordView>();
             foreach (var item in data)
             {
-                result.Add(new WordView() { word = item.word, type = item.type, mean = item.mean });
+                result.Add(new WordView() { word = item.word_o, type = GetStringDescriptionOfTypeKey(item.type_id), mean = item.word_m });
             }
             return result;
         }
 
-        public string GetStringDescriptionOfTypeKey(int id)
+        private string GetStringDescriptionOfTypeKey(int id)
         {
             return db.Types.Find(id).type_description;
         }
 
-        public IQueryable<IGrouping<int, Word>> GetMeansOfWord(string word)
-        {
-            return db.Words.Where(item => item.word_o.ToLower().Equals(word.ToLower())).GroupBy(item => item.type_id);
-        }
-
         public Word AddWord(string word, int typeID, string mean)
         {
-            Word obj = new Word() { word_o = word, type_id = typeID, word_m = mean, Type = GetTypeOfId(typeID) };
+            Word obj = new Word() { word_o = word, type_id = typeID, word_m = mean};
             db.Words.Add(obj);
             db.SaveChanges();
             return obj;
@@ -101,12 +102,7 @@ namespace Dictionary
             return obj;
         }
 
-        ~DatabaseManagement()
-        {
-            db.Dispose();
-        }
-
-        public int GetIDOfType(string type)
+        public int GetIdOfType(string type)
         {
             return db.Types.Where(item => item.type_description.Equals(type)).FirstOrDefault().Id;
         }

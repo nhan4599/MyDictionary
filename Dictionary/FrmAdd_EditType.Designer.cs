@@ -31,7 +31,7 @@ namespace Dictionary
         /// </summary>
         private void InitializeComponent()
         {
-            this.lbType = new Label();
+            this.lblType = new Label();
             this.txtType = new TextBox();
             this.btnTypeCancel = new Button();
             this.btnTypeSave = new Button();
@@ -40,14 +40,14 @@ namespace Dictionary
             // 
             // lblType
             // 
-            this.lbType.AutoSize = true;
-            this.lbType.Font = new Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbType.ForeColor = Color.Red;
-            this.lbType.Location = new Point(100, 10);
-            this.lbType.Name = "lblType";
-            this.lbType.Size = new Size(61, 27);
-            this.lbType.TabIndex = 3;
-            this.lbType.Text = "Type";
+            this.lblType.AutoSize = true;
+            this.lblType.Font = new Font("Microsoft YaHei", 12F, FontStyle.Bold);
+            this.lblType.ForeColor = Color.Red;
+            this.lblType.Location = new Point(100, 10);
+            this.lblType.Name = "lblType";
+            this.lblType.Size = new Size(61, 27);
+            this.lblType.TabIndex = 3;
+            this.lblType.Text = "Type";
 
             // 
             // txtType
@@ -60,17 +60,18 @@ namespace Dictionary
             // 
             // btnTypeCancel
             // 
-            this.btnTypeCancel.Font = new Font("Microsoft PhagsPa", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTypeCancel.Font = new Font("Microsoft PhagsPa", 10.2F, FontStyle.Bold);
             this.btnTypeCancel.Location = new Point(41, 94);
             this.btnTypeCancel.Name = "btnTypeCancel";
             this.btnTypeCancel.Size = new Size(75, 40);
             this.btnTypeCancel.TabIndex = 2;
             this.btnTypeCancel.Text = "Cancel";
             this.btnTypeCancel.UseVisualStyleBackColor = true;
+
             // 
             // btnTypeSave
             // 
-            this.btnTypeSave.Font = new Font("Microsoft PhagsPa", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
+            this.btnTypeSave.Font = new Font("Microsoft PhagsPa", 10.2F, FontStyle.Bold);
             this.btnTypeSave.Location = new Point(155, 94);
             this.btnTypeSave.Name = "btnTypeSave";
             this.btnTypeSave.Size = new Size(75, 40);
@@ -93,8 +94,8 @@ namespace Dictionary
             this.Controls.Add(this.btnTypeSave);
             this.Controls.Add(this.btnTypeCancel);
             this.Controls.Add(this.txtType);
-            this.Controls.Add(this.lbType);
-            this.Font = new System.Drawing.Font("Microsoft PhagsPa", 7.8F, FontStyle.Bold,GraphicsUnit.Point);
+            this.Controls.Add(this.lblType);
+            this.Font = new System.Drawing.Font("Microsoft PhagsPa", 7.8F, FontStyle.Bold);
             this.Name = "FrmAddType";
             this.Text = "FrmAddType";
             this.ResumeLayout(false);
@@ -103,7 +104,7 @@ namespace Dictionary
 
         #endregion
 
-        private System.Windows.Forms.Label lbType;
+        private System.Windows.Forms.Label lblType;
         private System.Windows.Forms.TextBox txtType;
         private System.Windows.Forms.Button btnTypeCancel;
         private System.Windows.Forms.Button btnTypeSave;

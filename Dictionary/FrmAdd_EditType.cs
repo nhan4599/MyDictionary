@@ -23,12 +23,12 @@ namespace Dictionary
             this.shouldAdd = shouldAdd;
             key[0] = id.ToString();
             key[1] = type;
-            this.Load += FrmEdit_AddTypeLoad;
+            this.Load += FrmAdd_EditTypeLoad;
             this.btnTypeSave.DialogResult = DialogResult.Yes;
             this.btnTypeCancel.Click += (sender, e) => this.Close();
         }
 
-        private void FrmEdit_AddTypeLoad(object sender, EventArgs e)
+        private void FrmAdd_EditTypeLoad(object sender, EventArgs e)
         {
             if (shouldAdd)
             {
@@ -42,17 +42,18 @@ namespace Dictionary
             }
         }
 
-        public void PerformAction(out Data.Type obj)
+        public Data.Type PerformAction()
         {
             if (shouldAdd)
             {
-                obj = manager.AddType(txtType.Text);
+                this.btnTypeCancel.PerformClick();
+                return manager.AddType(txtType.Text);
             }
             else
             {
-                obj = manager.EditType(int.Parse(key[0]), txtType.Text);
+                this.btnTypeCancel.PerformClick();
+                return manager.EditType(int.Parse(key[0]), txtType.Text);
             }
-            this.btnTypeCancel.PerformClick();
         }
     }
 }

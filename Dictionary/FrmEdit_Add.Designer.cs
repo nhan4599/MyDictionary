@@ -32,10 +32,10 @@ namespace Dictionary
         /// </summary>
         private void InitializeComponent()
         {
-            this.lbWord = new Label();
+            this.lblWord = new Label();
             this.txtWord = new TextBox();
-            this.lbType = new Label();
-            this.lbMean = new Label();
+            this.lblType = new Label();
+            this.lblMean = new Label();
             this.txtMean = new TextBox();
             this.cboType = new ComboBox();
             this.btnPerform = new Button();
@@ -45,12 +45,12 @@ namespace Dictionary
             //
             // lbWord
             //
-            this.lbWord.AutoSize = true;
-            this.lbWord.Location = new Point(59, 30);
-            this.lbWord.Name = "lbWord";
-            this.lbWord.Size = new Size(42, 17);
-            this.lbWord.TabIndex = 0;
-            this.lbWord.Text = "Word";
+            this.lblWord.AutoSize = true;
+            this.lblWord.Location = new Point(59, 30);
+            this.lblWord.Name = "lbWord";
+            this.lblWord.Size = new Size(42, 17);
+            this.lblWord.TabIndex = 0;
+            this.lblWord.Text = "Word";
 
             //
             // txtWord
@@ -63,23 +63,23 @@ namespace Dictionary
             //
             // lbType
             //
-            this.lbType.AutoSize = true;
-            this.lbType.Location = new Point(61, 87);
-            this.lbType.Name = "lbType";
-            this.lbType.Size = new Size(40, 17);
-            this.lbType.TabIndex = 2;
-            this.lbType.Text = "Type";
-            this.lbType.TextAlign = ContentAlignment.MiddleRight;
+            this.lblType.AutoSize = true;
+            this.lblType.Location = new Point(61, 87);
+            this.lblType.Name = "lbType";
+            this.lblType.Size = new Size(40, 17);
+            this.lblType.TabIndex = 2;
+            this.lblType.Text = "Type";
+            this.lblType.TextAlign = ContentAlignment.MiddleRight;
 
             //
             // lbMean
             //
-            this.lbMean.AutoSize = true;
-            this.lbMean.Location = new Point(59, 141);
-            this.lbMean.Name = "lbMean";
-            this.lbMean.Size = new Size(43, 17);
-            this.lbMean.TabIndex = 4;
-            this.lbMean.Text = "Mean";
+            this.lblMean.AutoSize = true;
+            this.lblMean.Location = new Point(59, 141);
+            this.lblMean.Name = "lbMean";
+            this.lblMean.Size = new Size(43, 17);
+            this.lblMean.TabIndex = 4;
+            this.lblMean.Text = "Mean";
 
             //
             // txtMean
@@ -134,21 +134,20 @@ namespace Dictionary
             this.Controls.Add(this.btnPerform);
             this.Controls.Add(this.cboType);
             this.Controls.Add(this.txtMean);
-            this.Controls.Add(this.lbMean);
-            this.Controls.Add(this.lbType);
+            this.Controls.Add(this.lblMean);
+            this.Controls.Add(this.lblType);
             this.Controls.Add(this.txtWord);
-            this.Controls.Add(this.lbWord);
+            this.Controls.Add(this.lblWord);
             this.Name = "FrmEdit_Add";
             this.Text = "FrmEdit_Add";
             this.StartPosition = FormStartPosition.CenterParent;
-            this.FormBorderStyle = FormBorderStyle.None;
             this.ResumeLayout(false);
             this.PerformLayout();
         }
 
         #endregion
 
-        private Label lbWord, lbType, lbMean;
+        private Label lblWord, lblType, lblMean;
         private TextBox txtWord, txtMean;
         private Button btnPerform, btnCancel;
         private ComboBox cboType;

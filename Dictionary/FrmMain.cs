@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Linq;
 using System.Data;
 using System.Collections.Generic;
 using System.IO;
 using Dictionary.Data;
+using System.Drawing;
 
 namespace Dictionary
 {
@@ -24,36 +24,42 @@ namespace Dictionary
             this.txtSearch.Focus();
             this.Load += GUI_Load;
             this.txtSearch.TextChanged += TxtSearch_TextChanged;
-            this.recmWordsList.MouseClick += RecmWordsList_MouseClick;
+            this.lbRecmWords.MouseClick += RecmWordsList_MouseClick;
             this.btnFind.Click += BtnFind_Click;
-            this.btnClear.Click += (sender, e) => this.txtSearch.Clear();
+            this.btnClear.Click += btnClear_Click;
             this.btnAdd.Click += btnAdd_Click;
             this.btnDelete.Click += BtnDelete_Click;
-            this.wordsTable.CellDoubleClick += WordsTable_CellDoubleClick;
+            this.grdWords.CellDoubleClick += WordsTable_CellDoubleClick;
             this.btnSelect.Click += (sender, e) => SelectAllCheckBox(true);
             this.btnDeSelect.Click += (sender, e) => SelectAllCheckBox(false);
             this.btnExport.Click += BtnExport_Click;
-            this.btnDirect.Click += BtnDirect_Click;
+            this.btnBrowse.Click += BtnDirect_Click;
             this.btnImport.Click += BtnImport_Click;
             this.btnPronounce.Click += BtnPronounce_Click;
             this.btnSwitch.CheckedChanged += btnSwitch_CheckedChanged;
+        }
+
+        void btnClear_Click(object sender, EventArgs e)
+        {
+            this.txtSearch.Clear();
+            LoadWordsToHintList();
         }
 
         void btnSwitch_CheckedChanged(object sender, EventArgs e)
         {
             if (this.btnSwitch.Checked == true)
             {
-                this.wordsTable.Columns.Clear();
-                this.wordsTable.Columns.Add("col1", "Type's ID");
-                this.wordsTable.Columns.Add("col2", "Type");
+                this.grdWords.Columns.Clear();
+                this.grdWords.Columns.Add("col1", "Type's ID");
+                this.grdWords.Columns.Add("col2", "Type");
                 LoadTypesToManageList();
             }
             else
             {
-                this.wordsTable.Columns.Clear();
-                this.wordsTable.Columns.Add("col1", "Word");
-                this.wordsTable.Columns.Add("col2", "Type");
-                this.wordsTable.Columns.Add("col3", "Mean");
+                this.grdWords.Columns.Clear();
+                this.grdWords.Columns.Add("col1", "Word");
+                this.grdWords.Columns.Add("col2", "Type");
+                this.grdWords.Columns.Add("col3", "Mean");
                 LoadWordsToManageList();
             }
         }
@@ -65,9 +71,12 @@ namespace Dictionary
                 FrmEdit_Add frm = new FrmEdit_Add(true);
                 if (frm.ShowDialog() == DialogResult.Yes)
                 {
-                    Word obj;
-                    frm.PerformAction(out obj);
-                    wordsTable.Rows.Add(obj.word_o, obj.Type.type_description, obj.word_m);
+                    Word obj = frm.PerformAction();
+                    grdWords.Rows.Add(obj.word_o, obj.Type.type_description, obj.word_m);
+                    grdWords.Sort(grdWords.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
+                    LoadWordsToHintList();
+                    LoadWordsToImExTab();
+                    MessageBox.Show("Added successfully");
                 }
             }
             else
@@ -75,24 +84,26 @@ namespace Dictionary
                 FrmAdd_EditType frm = new FrmAdd_EditType(true);
                 if (frm.ShowDialog() == DialogResult.Yes)
                 {
-                    Data.Type obj;
-                    frm.PerformAction(out obj);
-                    wordsTable.Rows.Add(obj.Id, obj.type_description);
+                    Data.Type obj = frm.PerformAction();
+                    grdWords.Rows.Add(obj.Id, obj.type_description);
+                    grdWords.Sort(grdWords.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
+                    LoadWordsToHintList();
+                    LoadWordsToImExTab();
+                    MessageBox.Show("Added successfully");
                 }
             }
-            wordsTable.Sort(wordsTable.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
-            MessageBox.Show("Added successfully");
         }
 
         private void BtnPronounce_Click(object sender, EventArgs e)
         {
-            if (this.txtMeans.TextLength > 0)
+            if (this.rtbMeans.TextLength > 0)
             {
-                string word = this.txtMeans.Lines[0];
+                string word = this.rtbMeans.Lines[0];
                 SpeechManagement speech = new SpeechManagement();
                 speech.Speak(word);
                 speech.Dispose();
-            }else
+            }
+            else
             {
                 MessageBox.Show("Don't have anything to speak out, first you must choose a word");
             }
@@ -111,10 +122,12 @@ namespace Dictionary
             List<Word> objs = importer.ImportTo(manager);
             for (int i = 0; i < objs.Count; i++)
             {
-                this.wordsTable.Rows.Add(objs[i].word_o, manager.GetTypeOfId(objs[i].type_id).type_description, objs[i].word_m);
+                this.grdWords.Rows.Add(objs[i].word_o, manager.GetTypeOfId(objs[i].type_id).type_description, objs[i].word_m);
             }
             this.Enabled = true;
-            this.wordsTable.Sort(this.wordsTable.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
+            this.grdWords.Sort(this.grdWords.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
+            LoadWordsToHintList();
+            LoadWordsToImExTab();
             MessageBox.Show("Imported successfully");
         }
 
@@ -172,7 +185,7 @@ namespace Dictionary
         private List<Word> GetSelectedWordsList()
         {
             List<Word> list = new List<Word>();
-            foreach (CheckBox ctrl in wordListPanel.Controls)
+            foreach (CheckBox ctrl in pnlWordsList.Controls)
             {
                 if (ctrl.Checked)
                 {
@@ -188,7 +201,7 @@ namespace Dictionary
 
         private void SelectAllCheckBox(bool @checked)
         {
-            foreach (Control ctrl in wordListPanel.Controls)
+            foreach (Control ctrl in pnlWordsList.Controls)
             {
                 if (ctrl is CheckBox)
                 {
@@ -206,17 +219,19 @@ namespace Dictionary
             {
                 if (this.btnSwitch.Checked == false)
                 {
-                    string word = wordsTable.SelectedRows[0].Cells[0].Value.ToString();
-                    string type = wordsTable.SelectedRows[0].Cells[1].Value.ToString();
-                    int id = manager.GetIDOfType(type);
+                    string word = grdWords.SelectedRows[0].Cells[0].Value.ToString();
+                    string type = grdWords.SelectedRows[0].Cells[1].Value.ToString();
+                    int id = manager.GetIdOfType(type);
                     manager.RemoveWord(word, id);
                 }
                 else
                 {
-                    int typeID = int.Parse(wordsTable.SelectedRows[0].Cells[0].Value.ToString());
+                    int typeID = int.Parse(grdWords.SelectedRows[0].Cells[0].Value.ToString());
                     manager.RemoveType(typeID);
                 }
-                wordsTable.Rows.RemoveAt(wordsTable.SelectedRows[0].Index);
+                grdWords.Rows.RemoveAt(grdWords.SelectedRows[0].Index);
+                LoadWordsToHintList();
+                LoadWordsToImExTab();
                 MessageBox.Show("removed successfully");
             }
         }
@@ -225,85 +240,97 @@ namespace Dictionary
         {
             if (!this.btnSwitch.Checked)
             {
-                string word = wordsTable.Rows[e.RowIndex].Cells[0].Value.ToString();
-                string type = wordsTable.Rows[e.RowIndex].Cells[1].Value.ToString();
-                string mean = wordsTable.Rows[e.RowIndex].Cells[2].Value.ToString();
-                FrmEdit_Add frm = new FrmEdit_Add(false, word, manager.GetIDOfType(type), mean);
+                string word = grdWords.Rows[e.RowIndex].Cells[0].Value.ToString();
+                string type = grdWords.Rows[e.RowIndex].Cells[1].Value.ToString();
+                string mean = grdWords.Rows[e.RowIndex].Cells[2].Value.ToString();
+                FrmEdit_Add frm = new FrmEdit_Add(false, word, manager.GetIdOfType(type), mean);
                 if (frm.ShowDialog() == DialogResult.Yes)
                 {
-                    Word obj;
-                    frm.PerformAction(out obj);
-                    wordsTable.Rows[e.RowIndex].Cells[2].Value = obj.word_m;
+                    Word obj = frm.PerformAction();
+                    grdWords.Rows[e.RowIndex].Cells[2].Value = obj.word_m;
+                    MessageBox.Show("Edited successfully");
                 }
                 frm.Dispose();
             }
             else
             {
-                int id = int.Parse(this.wordsTable.SelectedRows[0].Cells[0].Value.ToString());
-                string type = this.wordsTable.SelectedRows[0].Cells[1].Value.ToString();
+                int id = int.Parse(this.grdWords.SelectedRows[0].Cells[0].Value.ToString());
+                string type = this.grdWords.SelectedRows[0].Cells[1].Value.ToString();
                 FrmAdd_EditType frm = new FrmAdd_EditType(false, id, type);
                 if (frm.ShowDialog() == DialogResult.Yes)
                 {
-                    Data.Type obj;
-                    frm.PerformAction(out obj);
-                    wordsTable.Rows[e.RowIndex].Cells[1].Value = obj.type_description;
+                    Data.Type obj = frm.PerformAction();
+                    grdWords.Rows[e.RowIndex].Cells[1].Value = obj.type_description;
+                    MessageBox.Show("Edited successfully");
                 }
                 frm.Dispose();
             }
-            MessageBox.Show("Edited successfully");
         }
 
         private void RecmWordsList_MouseClick(object sender, MouseEventArgs e)
         {
             this.txtSearch.TextChanged -= TxtSearch_TextChanged;
-            this.txtSearch.Text = this.recmWordsList.Items[this.recmWordsList.IndexFromPoint(e.Location)].ToString();
+            this.txtSearch.Text = this.lbRecmWords.Items[this.lbRecmWords.IndexFromPoint(e.Location)].ToString();
             this.txtSearch.TextChanged += TxtSearch_TextChanged;
         }
 
         private void BtnFind_Click(object sender, EventArgs e)
         {
-            if (recmWordsList.Items.Count == 0)
+            if (lbRecmWords.Items.Count == 0)
             {
-                WebSearcher searcher = new WebSearcher();
-                MessageBox.Show(searcher.Search("culture"));
+                this.Enabled = false;
+                try
+                {
+                    WebSearcher searcher = new WebSearcher();
+                    List<Word> searchResult = searcher.Search(txtSearch.Text);
+                    ShowWordInfs(searchResult);
+                }catch (Exception ex)
+                {
+                    if (ex is System.Net.WebException)
+                    {
+                        MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Unexpected error has been occured. Please try again",
+                            "Error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                    }
+                }
+                this.Enabled = true;
                 return;
             }
-            ShowWordInfs(txtSearch.Text);
+            ShowWordInfs(manager.GetWords(txtSearch.Text));
         }
 
-        private void ShowWordInfs(string word)
+        private void ShowWordInfs(List<Word> data)
         {
-            this.txtMeans.Clear();
-            this.txtMeans.AppendText(word + Environment.NewLine);
-            this.txtMeans.SelectionStart = 0;
-            this.txtMeans.SelectionLength = this.txtMeans.Lines[0].Length;
-            this.txtMeans.SelectionColor = System.Drawing.Color.Purple;
-            var data = manager.GetMeansOfWord(word);
-            foreach (var type in data)
+            this.rtbMeans.Clear();
+            this.AppendText(data[0].word_o + Environment.NewLine, Color.Purple);
+            for (int i = 0; i < data.Count; i++)
             {
-                this.txtMeans.AppendText("    - " + manager.GetStringDescriptionOfTypeKey(type.Key));
-                this.txtMeans.SelectionStart = this.txtMeans.GetFirstCharIndexOfCurrentLine();
-                this.txtMeans.SelectionLength = this.txtMeans.Lines[this.txtMeans.GetLineFromCharIndex(this.txtMeans.SelectionStart)].Length;
-                this.txtMeans.SelectionColor = System.Drawing.Color.Blue;
-                this.txtMeans.AppendText(Environment.NewLine);
-                foreach (var means in type)
-                {
-                    this.txtMeans.AppendText("        + " + means.word_m + Environment.NewLine);
-                }
+                this.AppendText("    - " + data[i].Type.type_description + Environment.NewLine, Color.Blue);
+                this.AppendText("\t+ " + data[i].word_m + Environment.NewLine, Color.Black);
             }
+        }
+
+        private void AppendText(string text, Color color)
+        {
+            rtbMeans.SelectionStart = rtbMeans.TextLength;
+            rtbMeans.SelectionLength = 0;
+            rtbMeans.SelectionColor = color;
+            rtbMeans.AppendText(text);
+            rtbMeans.SelectionColor = rtbMeans.ForeColor;
         }
 
         private void TxtSearch_TextChanged(object sender, EventArgs e)
         {
             ShowRecommendWords(this.txtSearch.Text);
         }
-
+       
         private void ShowRecommendWords(string text)
         {
-            var dataSource = manager.GetDistinctWordsList();
-            var data = dataSource.Where(item => item.ToLower().StartsWith(text.ToLower())).Select(item => item);
-            this.recmWordsList.DataSource = data.ToList();
-            this.recmWordsList.ClearSelected();
+            this.lbRecmWords.DataSource = manager.GetWordsStartWith(text);
+            this.lbRecmWords.ClearSelected();
         }
 
         private void GUI_Load(object sender, EventArgs e)
@@ -315,10 +342,11 @@ namespace Dictionary
 
         private void LoadWordsToImExTab()
         {
+            pnlWordsList.Controls.Clear();
             var data = manager.GetDistinctWordsList();
             foreach (string item in data)
             {
-                this.wordListPanel.Controls.Add(new CheckBox() { Checked = false, Text = item, Cursor = Cursors.Hand });
+                this.pnlWordsList.Controls.Add(new CheckBox() { Checked = false, Text = item, Cursor = Cursors.Hand });
             }
         }
 
@@ -327,7 +355,7 @@ namespace Dictionary
             var data = manager.GetWordsData();
             foreach (var item in data)
             {
-                wordsTable.Rows.Add(item.word, item.type, item.mean);
+                grdWords.Rows.Add(item.word, item.type, item.mean);
             }
         }
 
@@ -336,14 +364,14 @@ namespace Dictionary
             var data = manager.GetTypes();
             foreach (var item in data)
             {
-                wordsTable.Rows.Add(item.Id, item.type_description);
+                grdWords.Rows.Add(item.Id, item.type_description);
             }
         }
 
         private void LoadWordsToHintList()
         {
-            this.recmWordsList.DataSource = manager.GetDistinctWordsList();
-            this.recmWordsList.ClearSelected();
+            this.lbRecmWords.DataSource = manager.GetDistinctWordsList();
+            this.lbRecmWords.ClearSelected();
         }
 
         private void SetHandCursor(Control page)
