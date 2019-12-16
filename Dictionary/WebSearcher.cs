@@ -12,7 +12,6 @@ namespace Dictionary
     class WebSearcher
     {
         private const string searchUrl = "https://vdict.com/{0},1,0,0.html";
-        private DatabaseManagement manager;
         private bool IsNetworkAvailable()
         {
             return NetworkInterface.GetIsNetworkAvailable();
@@ -26,7 +25,6 @@ namespace Dictionary
             }
             try
             {
-                manager = new DatabaseManagement();
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                 Stream stream = request.GetResponse().GetResponseStream();
                 StreamReader reader = new StreamReader(stream);
@@ -39,19 +37,17 @@ namespace Dictionary
             }
         }
 
-        public List<Word> Search(string word)
+        public List<WordView> Search(string word)
         {
-            List<Word> result = new List<Word>();
+            List<WordView> result = new List<WordView>();
             string htmlSource = GetHtmlSource(string.Format(searchUrl, word));
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(htmlSource);
             HtmlNodeCollection data = doc.DocumentNode.SelectNodes("//div[@class='phanloai']");
-            var listsType = manager.GetTypesString();
             string means = "";
             string current = "";
             int startIndex = 0;
             int endIndex = 0;
-            int type_id = -1;
             HtmlNodeCollection collect = null;
             HtmlDocument temp = new HtmlDocument();
             for (int i = 0; i < data.Count - 1; i++)
@@ -66,8 +62,7 @@ namespace Dictionary
                     means += collect[j].InnerText + ", ";
                 }
                 means = means.Remove(means.Length - 2);
-                type_id = manager.GetIdOfType(data[i].InnerText);
-                result.Add(new Word() {word_o = word, type_id = type_id, word_m = means, Type = manager.GetTypeOfId(type_id) });
+                result.Add(new WordView() { word = word, type = data[i].InnerText, mean = means});
             }
             HtmlNode node = data[data.Count - 1];
             startIndex = node.StreamPosition;
@@ -80,8 +75,7 @@ namespace Dictionary
                 means += collect[j].InnerText + ", ";
             }
             means = means.Remove(means.Length - 2);
-            type_id = manager.GetIdOfType(node.InnerText);
-            result.Add(new Word() { word_o = word, type_id = type_id, word_m = means , Type = manager.GetTypeOfId(type_id)});
+            result.Add(new WordView() { word = word, type = data[data.Count - 1].InnerText, mean = means });
             return result;
         }
     }

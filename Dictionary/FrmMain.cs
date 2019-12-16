@@ -270,7 +270,11 @@ namespace Dictionary
         private void RecmWordsList_MouseClick(object sender, MouseEventArgs e)
         {
             this.txtSearch.TextChanged -= TxtSearch_TextChanged;
-            this.txtSearch.Text = this.lbRecmWords.Items[this.lbRecmWords.IndexFromPoint(e.Location)].ToString();
+            int index = this.lbRecmWords.IndexFromPoint(e.Location);
+            if (index!=-1)
+            {
+                this.txtSearch.Text = this.lbRecmWords.Items[index].ToString();
+            }
             this.txtSearch.TextChanged += TxtSearch_TextChanged;
         }
 
@@ -282,7 +286,7 @@ namespace Dictionary
                 try
                 {
                     WebSearcher searcher = new WebSearcher();
-                    List<Word> searchResult = searcher.Search(txtSearch.Text);
+                    List<WordView> searchResult = searcher.Search(txtSearch.Text);
                     ShowWordInfs(searchResult);
                 }catch (Exception ex)
                 {
@@ -300,6 +304,17 @@ namespace Dictionary
                 return;
             }
             ShowWordInfs(manager.GetWords(txtSearch.Text));
+        }
+
+        private void ShowWordInfs(List<WordView> data)
+        {
+            this.rtbMeans.Clear();
+            this.AppendText(data[0].word + Environment.NewLine, Color.Purple);
+            for (int i = 0; i < data.Count; i++)
+            {
+                this.AppendText("    - " + data[i].type + Environment.NewLine, Color.Blue);
+                this.AppendText("\t+ " + data[i].mean + Environment.NewLine, Color.Black);
+            }
         }
 
         private void ShowWordInfs(List<Word> data)
@@ -329,6 +344,11 @@ namespace Dictionary
        
         private void ShowRecommendWords(string text)
         {
+            if (text == "")
+            {
+                LoadWordsToHintList();
+                return;
+            }
             this.lbRecmWords.DataSource = manager.GetWordsStartWith(text);
             this.lbRecmWords.ClearSelected();
         }
