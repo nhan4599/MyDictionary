@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
 using Dictionary.Data;
+using System;
 
 namespace Dictionary
 {
@@ -34,9 +35,7 @@ namespace Dictionary
             else
             {
                 this.txtWord.Text = key[0];
-                this.txtWord.ReadOnly = true;
                 this.cboType.SelectedItem = manager.GetTypeOfId(int.Parse(key[1]));
-                this.cboType.Enabled = false;
                 this.txtMean.Text = key[2];
                 this.btnPerform.Text = "Save";
             }
@@ -52,7 +51,22 @@ namespace Dictionary
             else
             {
                 this.btnCancel.PerformClick();
-                return manager.EditWord(txtWord.Text, int.Parse(cboType.SelectedValue.ToString()), txtMean.Text);
+                if (key[0] != txtWord.Text || key[1] != cboType.SelectedValue.ToString())
+                {
+                    try
+                    {
+                        manager.RemoveWord(key[0], int.Parse(key[1]));
+                        return manager.AddWord(key[0], int.Parse(cboType.SelectedValue.ToString()), txtMean.Text);
+                    }
+                    catch (Exception)
+                    {
+                        throw new Exception("Unexpected error has occured");
+                    }
+                }
+                else
+                {
+                    return manager.EditWord(txtWord.Text, int.Parse(cboType.SelectedValue.ToString()), txtMean.Text);
+                }
             }
         }
 

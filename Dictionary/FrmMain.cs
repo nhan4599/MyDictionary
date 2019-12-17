@@ -36,13 +36,23 @@ namespace Dictionary
             this.btnBrowse.Click += BtnDirect_Click;
             this.btnImport.Click += BtnImport_Click;
             this.btnPronounce.Click += BtnPronounce_Click;
+            this.lblHelp.Click += lblHelp_Click;
             this.btnSwitch.CheckedChanged += btnSwitch_CheckedChanged;
+        }
+
+        void lblHelp_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("In this form, user can :" +
+                            "\n + Click switch button to switch between manage word mode and manage type mode" +
+                            "\n + Click add to add word/type" +
+                            "\n + Double-click a row to edit an item" +
+                            "\n + Choose a row and click Delete button to delete an item",
+                            "Help", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         void btnClear_Click(object sender, EventArgs e)
         {
             this.txtSearch.Clear();
-            LoadWordsToHintList();
         }
 
         void btnSwitch_CheckedChanged(object sender, EventArgs e)
@@ -71,11 +81,19 @@ namespace Dictionary
                 FrmEdit_Add frm = new FrmEdit_Add(true);
                 if (frm.ShowDialog() == DialogResult.Yes)
                 {
-                    Word obj = frm.PerformAction();
-                    grdWords.Rows.Add(obj.word_o, obj.Type.type_description, obj.word_m);
-                    grdWords.Sort(grdWords.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
-                    LoadWordsToHintList();
-                    LoadWordsToImExTab();
+                    try
+                    {
+                        Word obj = frm.PerformAction();
+                        grdWords.Rows.Add(obj.word_o, obj.Type.type_description, obj.word_m);
+                        grdWords.Sort(grdWords.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
+                        LoadWordsToHintList();
+                        LoadWordsToImExTab();
+                    }catch (Exception)
+                    {
+                        MessageBox.Show("This word has already existed", "Error",
+                                        MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                        return;
+                    }
                     MessageBox.Show("Added successfully");
                 }
             }
@@ -246,8 +264,19 @@ namespace Dictionary
                 FrmEdit_Add frm = new FrmEdit_Add(false, word, manager.GetIdOfType(type), mean);
                 if (frm.ShowDialog() == DialogResult.Yes)
                 {
-                    Word obj = frm.PerformAction();
-                    grdWords.Rows[e.RowIndex].Cells[2].Value = obj.word_m;
+                    try
+                    {
+                        Word obj = frm.PerformAction();
+                        grdWords.Rows[e.RowIndex].Cells[0].Value = obj.word_o;
+                        grdWords.Rows[e.RowIndex].Cells[1].Value = manager.GetTypeOfId(obj.type_id).type_description;
+                        grdWords.Rows[e.RowIndex].Cells[2].Value = obj.word_m;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error"
+                            , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     MessageBox.Show("Edited successfully");
                 }
                 frm.Dispose();
