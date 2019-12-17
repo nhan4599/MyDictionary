@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace Dictionary
 {
-    partial class FrmAdd_EditType
+    partial class FrmEdit_AddType
     {
         /// <summary>
         /// Required designer variable.
@@ -61,7 +61,10 @@ namespace Dictionary
             // btnTypeCancel
             // 
             this.btnTypeCancel.Font = new Font("Microsoft PhagsPa", 10.2F, FontStyle.Bold);
-            this.btnTypeCancel.Location = new Point(41, 94);
+            this.btnTypeCancel.Cursor = Cursors.Hand;
+            this.btnTypeCancel.BackColor = Color.FromArgb(255, 106, 106);
+            this.btnTypeCancel.FlatStyle = FlatStyle.Popup;
+            this.btnTypeCancel.Location = new Point(155, 94);
             this.btnTypeCancel.Name = "btnTypeCancel";
             this.btnTypeCancel.Size = new Size(75, 40);
             this.btnTypeCancel.TabIndex = 2;
@@ -72,7 +75,10 @@ namespace Dictionary
             // btnTypeSave
             // 
             this.btnTypeSave.Font = new Font("Microsoft PhagsPa", 10.2F, FontStyle.Bold);
-            this.btnTypeSave.Location = new Point(155, 94);
+            this.btnTypeSave.Cursor = Cursors.Hand;
+            this.btnTypeSave.BackColor = Color.FromArgb(255, 106, 106);
+            this.btnTypeSave.FlatStyle = FlatStyle.Popup;
+            this.btnTypeSave.Location = new Point(41, 94);
             this.btnTypeSave.Name = "btnTypeSave";
             this.btnTypeSave.Size = new Size(75, 40);
             this.btnTypeSave.TabIndex = 1;

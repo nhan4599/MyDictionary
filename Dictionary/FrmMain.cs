@@ -99,7 +99,7 @@ namespace Dictionary
             }
             else
             {
-                FrmAdd_EditType frm = new FrmAdd_EditType(true);
+                FrmEdit_AddType frm = new FrmEdit_AddType(true);
                 if (frm.ShowDialog() == DialogResult.Yes)
                 {
                     Data.Type obj = frm.PerformAction();
@@ -285,7 +285,7 @@ namespace Dictionary
             {
                 int id = int.Parse(this.grdWords.SelectedRows[0].Cells[0].Value.ToString());
                 string type = this.grdWords.SelectedRows[0].Cells[1].Value.ToString();
-                FrmAdd_EditType frm = new FrmAdd_EditType(false, id, type);
+                FrmEdit_AddType frm = new FrmEdit_AddType(false, id, type);
                 if (frm.ShowDialog() == DialogResult.Yes)
                 {
                     Data.Type obj = frm.PerformAction();

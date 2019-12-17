@@ -126,11 +126,11 @@
       <DependentUpon>DataModels.tt</DependentUpon>
     </Compile>
     <Compile Include="ExcelManagement.cs" />
-    <Compile Include="FrmAdd_EditType.cs">
+    <Compile Include="FrmEdit_AddType.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmAdd_EditType.Designer.cs">
-      <DependentUpon>FrmAdd_EditType.cs</DependentUpon>
+    <Compile Include="FrmEdit_AddType.Designer.cs">
+      <DependentUpon>FrmEdit_AddType.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmEdit_Add.cs">
       <SubType>Form</SubType>
@@ -146,8 +146,8 @@
     <Compile Include="SpeechManagement.cs" />
     <Compile Include="WebSearcher.cs" />
     <Compile Include="WordView.cs" />
-    <EmbeddedResource Include="FrmAdd_EditType.resx">
-      <DependentUpon>FrmAdd_EditType.cs</DependentUpon>
+    <EmbeddedResource Include="FrmEdit_AddType.resx">
+      <DependentUpon>FrmEdit_AddType.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

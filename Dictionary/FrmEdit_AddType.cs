@@ -11,7 +11,7 @@ using Dictionary.Data;
 
 namespace Dictionary
 {
-    public partial class FrmAdd_EditType : Form
+    public partial class FrmEdit_AddType : Form
     {
         private bool shouldAdd = false;
 
@@ -19,7 +19,7 @@ namespace Dictionary
 
         private string[] key = new string[2];
 
-        public FrmAdd_EditType(bool shouldAdd, int id = -1, string type = "")
+        public FrmEdit_AddType(bool shouldAdd, int id = -1, string type = "")
         {
             InitializeComponent();
             manager = new DatabaseManagement();
@@ -28,6 +28,7 @@ namespace Dictionary
             key[1] = type;
             this.Load += FrmAdd_EditTypeLoad;
             this.btnTypeSave.DialogResult = DialogResult.Yes;
+            this.btnTypeCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnTypeCancel.Click += (sender, e) => this.Close();
         }
 
@@ -41,6 +42,7 @@ namespace Dictionary
             else
             {
                 this.Text = string.Format("Edit type \"{0}\"", key[1]);
+                this.txtType.Text = key[1];
                 this.btnTypeSave.Text = "Save";
             }
         }

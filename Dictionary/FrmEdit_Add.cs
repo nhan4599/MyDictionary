@@ -30,6 +30,7 @@ namespace Dictionary
             LoadTypeList();
             if (this.shouldAdd)
             {
+                this.Text = "Add new word";
                 this.btnPerform.Text = "Add";
             }
             else
@@ -37,6 +38,7 @@ namespace Dictionary
                 this.txtWord.Text = key[0];
                 this.cboType.SelectedItem = manager.GetTypeOfId(int.Parse(key[1]));
                 this.txtMean.Text = key[2];
+                this.Text = string.Format("Edit word \"{0}\"", key[0]);
                 this.btnPerform.Text = "Save";
             }
         }
