@@ -207,7 +207,7 @@ namespace Dictionary
             {
                 if (ctrl.Checked)
                 {
-                    var temp = manager.GetWords(ctrl.Text);
+                    List<Word> temp = manager.GetWords(ctrl.Text);
                     for (int i = 0; i < temp.Count; i++)
                     {
                         list.Add(temp[i]);
