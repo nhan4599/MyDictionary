@@ -20,7 +20,8 @@ namespace Dictionary
 
         public List<string> GetWordsStartWith(string text)
         {
-            return db.Words.Where(item => item.word_o.ToLower().StartsWith(text.ToLower())).Select(item => item.word_o).ToList();
+            var data = GetDistinctWordsList();
+            return data.Where(item => item.ToLower().StartsWith(text.ToLower())).ToList();
         }
 
         public List<WordView> GetWordsData()
