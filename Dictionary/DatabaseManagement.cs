@@ -37,7 +37,7 @@ namespace Dictionary
 
         private string GetStringDescriptionOfTypeKey(int id)
         {
-            return db.Types.Find(id).type_description;
+            return db.Types.AsNoTracking().Where(i => i.Id == id).FirstOrDefault().type_description;
         }
 
         public Word AddWord(string word, int typeID, string mean)
@@ -50,7 +50,7 @@ namespace Dictionary
 
         public Type AddType(string type)
         {
-            Type obj = new Type() {type_description = type };
+            Type obj = new Type() { type_description = type };
             db.Types.Add(obj);
             db.SaveChanges();
             return obj;
@@ -74,12 +74,12 @@ namespace Dictionary
 
         public List<Word> GetWords(string word)
         {
-            return db.Words.Where(item => item.word_o.ToLower().Equals(word)).ToList();
+            return db.Words.AsNoTracking().Where(item => item.word_o.ToLower().Equals(word)).ToList();
         }
 
         public List<Type> GetTypes()
         {
-            return db.Types.ToList();
+            return db.Types.AsNoTracking().ToList();
         }
 
         public Type GetTypeOfId(int id)

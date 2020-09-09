@@ -11,7 +11,7 @@ namespace Dictionary
 {
     class WebSearcher
     {
-        private const string searchUrl = "https://vdict.com/{0},1,0,0.html";
+        private const string SEARCH_URL = "https://vdict.com/{0},1,0,0.html";
         private bool IsNetworkAvailable()
         {
             return NetworkInterface.GetIsNetworkAvailable();
@@ -21,7 +21,7 @@ namespace Dictionary
         {
             if (!IsNetworkAvailable())
             {
-                throw new System.Net.WebException("Your network is not available, please check your connection");
+                throw new WebException("Your network is not available, please check your connection");
             }
             try
             {
@@ -40,7 +40,7 @@ namespace Dictionary
         public List<WordView> Search(string word)
         {
             List<WordView> result = new List<WordView>();
-            string htmlSource = GetHtmlSource(string.Format(searchUrl, word));
+            string htmlSource = GetHtmlSource(string.Format(SEARCH_URL, word));
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(htmlSource);
             HtmlNodeCollection data = doc.DocumentNode.SelectNodes("//div[@class='phanloai']");
